@@ -16,6 +16,8 @@
 def triangle(a, b, c)
   sides = [a, b, c]
 
+  raise TriangleError unless valid_triangle?(sides)
+
   if equilateral? sides
     :equilateral
   elsif iscoseles? sides
@@ -23,6 +25,15 @@ def triangle(a, b, c)
   else
     :scalene
   end
+end
+
+def valid_triangle?(sides)
+  (sides.any? { |side| side <= 0 } || inequal?(sides)) ? false : true
+end
+
+def inequal?(sides)
+  sorted_sides = sides.sort
+  (sorted_sides[0] + sorted_sides[1]) <= sorted_sides[2]
 end
 
 def equilateral?(sides)

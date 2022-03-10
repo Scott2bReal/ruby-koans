@@ -29,8 +29,57 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
+class Dice
+  def initialize(rolls)
+    @rolls = rolls
+    @score = 0
+  end
+
+  attr_reader :score
+
+  def calculate_score
+    score_threes
+    score_loose_nums
+  end
+
+  private
+
+  attr_reader :rolls
+  attr_writer :score
+
+  def score_threes
+    set = nil
+
+    (1..6).to_a.each do |num|
+      set = num if rolls.count(num) >= 3
+    end
+
+    if set == 1
+      self.score += 1000
+    elsif set 
+      self.score += (set * 100)
+    end
+  end
+
+  def score_loose_nums
+    loose_ones = find_loose_nums(1)
+    loose_fives = find_loose_nums(5)
+
+    self.score += (loose_ones * 100)
+    self.score += (loose_fives * 50)
+  end
+
+  def find_loose_nums(num)
+    loose_num = rolls.count(num)
+    loose_num -= 3 if loose_num >= 3
+    loose_num
+  end
+end
+
 def score(dice)
-  # You need to write this method
+  dice = Dice.new(dice)
+  dice.calculate_score
+  dice.score
 end
 
 class AboutScoringProject < Neo::Koan
